@@ -1,0 +1,77 @@
+.hash-details-main {
+  background-color: #20293a;
+  color: white;
+  border-radius: 5px;
+  display: flex;
+  padding: 30px;
+  flex-wrap: wrap;
+  gap: 10px;
+  flex-direction: column;
+  box-shadow: 0px 0px 10px 0px rgb(0 0 0 / 50%);
+}
+.hash-value-widget {
+  padding: 10px 0px;
+}
+.title {
+  font-size: 1rem;
+  color: #fff;
+  text-align: start;
+  margin: 10px 0px;
+  letter-spacing: 1px;
+}
+.info-item {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  border-bottom: 1px solid gray;
+  padding-bottom: 15px;
+  justify-content: space-around;
+  gap: 20px; /* Adjust the gap as needed */
+}
+.info-response-data {
+  flex: 1; /* Distribute items evenly within the container */
+  max-width: 300px; /* Adjust the max-width as needed */
+  overflow: hidden; /* Hide overflow */
+  text-overflow: ellipsis;
+  width: 55%;
+  /* letter-spacing: 1px; */
+  text-align: start;
+  position: relative; /* Show ellipsis (...) for long text */
+}
+.info-response-data::before {
+  content: attr(data-text); /* Use data-text attribute content */
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(
+    -50%,
+    -50%
+  ); /* Center the content vertically and horizontally */
+  background: white; /* Background color to hide the text overflow */
+  padding: 0 5px; /* Adjust padding as needed */
+  z-index: 1; /* Place it above the ellipsis */
+}
+.info-lable {
+  text-align: start;
+  width: 35%;
+  letter-spacing: 1px;
+}
+.result-color {
+  color: #73bb73;
+}
+.add-color {
+  color: black;
+  background: #ffb46a;
+  padding: 5px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.invalid-address {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40vh;
+  color: #ffffff;
+}

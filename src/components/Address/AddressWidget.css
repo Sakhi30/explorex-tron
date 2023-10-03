@@ -1,0 +1,137 @@
+.info-item2 {
+  /* border: 1px solid gray; */
+  padding: 5px;
+}
+.info-sub-flex {
+  display: flex;
+  width: 30%;
+  justify-content: space-around;
+}
+.subflex-title {
+  background-color: black;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+}
+.subflex-title.active {
+  background-color: #007bff; /* Change to your desired active tab color */
+  color: white; /* Change to your desired text color for active tab */
+}
+.subflex-data-main {
+  justify-content: center;
+  min-height: 70px;
+  height: 120px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+.voter-flex {
+  display: flex;
+  justify-content: space-around;
+}
+table tr th {
+  font-size: 15px;
+  padding: 8px;
+  border-bottom: 1px solid gray;
+  background-color: black;
+}
+table tr td {
+  font-size: 12px;
+  padding: 8px;
+}
+table {
+  width: 100%;
+  border: 1px solid gray;
+  margin: 10px 0px;
+}
+#voter-table {
+  width: 70%;
+  margin: 0 auto;
+}
+table::-webkit-scrollbar {
+  width: 5px;
+  height: 8px;
+  background-color: #aaa; /* or add it to the track */
+}
+table::-webkit-scrollbar-thumb {
+  background-color: #18141d;
+}
+/* ................ */
+#transaction-table {
+  width: 100%;
+}
+.transaction-flex-main {
+  display: flex;
+  height: 65px;
+  border-bottom: 1px solid gray;
+  margin: 0 auto;
+  padding: 0px 10px;
+  justify-content: space-between;
+}
+
+.transaction-flex {
+  display: flex;
+  height: 65px;
+  text-align: start;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+table {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  height: 140px;
+  max-height: 140px;
+  width: 320px;
+  overflow: auto;
+  resize: both;
+  scrollbar-color: rgba(255, 100, 70, 0.8) rgba(0, 100, 200, 0.5) !important;
+}
+th,
+td {
+  padding: 1em;
+  border: 1px solid;
+}
+thead,
+tbody,
+tr {
+  display: contents;
+}
+th[aria-controls] {
+  position: sticky;
+  top: 0;
+  border-bottom: solid 1px;
+  background: #18141d;
+  height: 20px;
+}
+
+/* add some gaps */
+
+/* cell alignements */
+td {
+  display: grid;
+  align-items: center /* or else */;
+  justify-content: center /* or else */;
+}
+[data-rowspan="2"] {
+  grid-row: span 2;
+}
+
+.vote_table {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  height: 106px;
+  max-height: 106px;
+  margin: 10px 0px;
+  width: 320px;
+  overflow: auto;
+  resize: both;
+  scrollbar-color: rgba(255, 100, 70, 0.8) rgba(0, 100, 200, 0.5) !important;
+}
+.invalid-address {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40vh;
+  color: #ffffff;
+}

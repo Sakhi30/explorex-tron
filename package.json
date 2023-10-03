@@ -1,0 +1,57 @@
+{
+  "name": "explorex",
+  "version": "0.0.1",
+  "description": "React component library to add transaction info widgets to any DAPP.",
+  "main": "dist/cjs/index.js",
+  "scripts": {
+    "rollup": "rollup -c",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject"
+  },
+  "author": "Sakhi",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.2.1",
+    "@rollup/plugin-typescript": "^11.1.3",
+    "@types/react": "^18.2.21",
+    "assert": "^2.0.0",
+    "browserify-fs": "^1.0.0",
+    "browserify-zlib": "^0.2.0",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
+    "fs": "^0.0.1-security",
+    "https-browserify": "^1.0.0",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
+    "postcss": "^8.4.29",
+    "process": "^0.11.10",
+    "react-app-rewired": "^2.2.1",
+    "rollup": "^3.28.1",
+    "rollup-plugin-dts": "^6.0.1",
+    "rollup-plugin-postcss": "^4.0.2",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "tslib": "^2.6.2",
+    "typescript": "^5.2.2",
+    "url": "^0.11.1",
+    "util": "^0.12.5",
+    "react-redux": "^8.1.2",
+    "redux": "^4.2.1",
+    "redux-thunk": "^2.4.2"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
+  },
+  "module": "dist/esm/index.js",
+  "files": [
+    "dist"
+  ],
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "axios": "^1.2.6"
+  }
+}

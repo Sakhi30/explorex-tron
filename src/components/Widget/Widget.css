@@ -1,0 +1,257 @@
+.search-widget {
+  position: absolute;
+  bottom: 0; /* Adjust the distance above the button as needed */
+  right: 0; /* Adjust the horizontal position as needed */
+  background-color: #fff; /* Customize widget background color as needed */
+  border: 1px solid #ccc; /* Customize widget border as needed */
+  padding: 20px;
+  display: none; /* Initially hide the widget */
+  width: 50%;
+  max-width: 500px;
+  height: 500px;
+  overflow: scroll;
+  overflow-x: hidden;
+  min-width: 350px;
+  background-color: #18141d;
+  border-radius: 12px;
+  box-shadow: 0px 0px 10px 0px rgb(0 0 0 / 50%);
+}
+.search-widget::before {
+  animation: animatedgradient 3s ease infinite alternate;
+  left: -4px;
+  position: absolute;
+  top: -4px;
+  width: calc(100% + 8px);
+  background: linear-gradient(
+    60deg,
+    #ffb46a,
+    #ff9984,
+    #ff84a7,
+    #f09eff,
+    #97baff,
+    #7bedff,
+    #93fff1,
+    #a1ffb8
+  );
+  background-size: 300% 300%;
+  border-radius: 12px;
+  content: "";
+  z-index: -1;
+  height: calc(100% + 8px);
+}
+
+/* Keyframes for Animation */
+@keyframes animatedgradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+.widget-content-container {
+  height: 500px;
+  overflow-x: hidden;
+  overflow: scroll;
+  padding: 20px;
+}
+.w-sec1-flex {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #fff;
+  align-items: center;
+}
+.w-sec2-flex {
+  display: flex;
+  grid-template-columns: auto 120px;
+  gap: 3px;
+  padding: 20px 5px;
+  width: 100%;
+}
+
+select {
+  width: 100px; /* Adjust the width as needed */
+  padding: 5px;
+  cursor: pointer;
+  background-color: #20293a;
+  border: none;
+  color: #ffffff;
+  border-radius: 2px;
+  outline: none;
+  height: 30px;
+}
+
+input[type="text"] {
+  flex-grow: 1; /* Allow the input to grow and take available space */
+  padding: 10px;
+  background-color: #20293a;
+  border: none;
+  border-radius: 2px;
+  outline: none;
+  color: #ffffff;
+  height: 30px;
+}
+
+/* Button Styles */
+.search-button {
+  /* background-color: initial; */
+  background: transparent;
+  border-radius: 5px;
+  color: #18141d;
+  /* flex: 0 0 100px; */
+  letter-spacing: 0.5px;
+  width: 70%;
+  padding: 10px 5px;
+  height: 60%;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  z-index: 1;
+  position: relative; /* You may need this line */
+}
+
+/* Button Background Animation */
+.search-button::before {
+  content: "";
+  animation: animatedgradient 3s ease infinite alternate;
+  left: -4px;
+  position: absolute;
+  top: -4px;
+  width: calc(100% + 8px);
+  background: linear-gradient(
+    60deg,
+    #ffb46a,
+    #ff9984,
+    #ff84a7,
+    #f09eff,
+    #97baff,
+    #7bedff,
+    #93fff1,
+    #a1ffb8
+  );
+  background-size: 300% 300%;
+  border-radius: 12px;
+  content: "";
+  z-index: -1;
+  height: calc(100% + 8px);
+}
+
+/* Keyframes for Animation */
+@keyframes animatedgradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+.donate-btn {
+  width: 20%;
+}
+.close-button {
+  background-color: #20293a;
+  border-radius: 10px;
+  color: white;
+  flex: 0 0 40px;
+  letter-spacing: 0.5px;
+  border: none;
+  padding: 10px 5px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+#search-widget.open {
+  display: block; /* Display the widget when it's open */
+}
+
+#search-widget.closed {
+  display: none; /* Hide the widget when it's closed */
+}
+
+.home-page {
+  position: relative;
+  height: 100vh; /* Ensures the button stays at the bottom of the viewport */
+}
+
+.search-btn {
+  position: absolute;
+  bottom: 10px; /* Adjust the distance from the bottom as needed */
+  right: 10px; /* Adjust the distance from the right as needed */
+  padding: 10px 20px; /* Add padding for the button */
+  color: black;
+  border-radius: 5px;
+  cursor: pointer;
+  animation: zoomInOut 0.5s; /* Adjust the duration as needed */
+  animation-fill-mode: forwards;
+  animation: zoom-in-zoom-out 2s ease infinite;
+}
+.search-btn::before {
+  animation: animatedgradient 3s ease infinite alternate;
+  left: -4px;
+  position: absolute;
+  top: -4px;
+  width: calc(100% + 8px);
+  background: linear-gradient(
+    60deg,
+    #ffb46a,
+    #ff9984,
+    #ff84a7,
+    #f09eff,
+    #97baff,
+    #7bedff,
+    #93fff1,
+    #a1ffb8
+  );
+  background-size: 300% 300%;
+  border-radius: 12px;
+  content: "";
+  border: 1px solid black;
+  z-index: -1;
+  height: calc(100% + 8px);
+}
+@keyframes animatedgradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+@keyframes zoom-in-zoom-out {
+  0% {
+    transform: scale(0.5, 0.5);
+  }
+  50% {
+    transform: scale(1, 1);
+  }
+  100% {
+    transform: scale(0.5, 0.5);
+  }
+}
+.home-page:hover .search-widget {
+  display: block; /* Display the widget when hovering over the home page */
+}
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 35vh;
+}
+
+.loader-spinner {
+  width: 30px;
+  height: 30px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
