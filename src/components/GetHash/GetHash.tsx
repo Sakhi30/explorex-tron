@@ -15,11 +15,6 @@ export const GetHash = (hashValue: string) => {
   if (selectElement && selectElement instanceof HTMLSelectElement) {
     selectElement.value = "option3"; // Change this line to set the value to "option3"
   }
-  const selectChainElement = document.getElementById("select-chain");
-
-  if (selectChainElement && selectChainElement instanceof HTMLInputElement) {
-    selectChainElement.value = "chain1";
-  }
   const button = document.getElementById("search-btn");
   if (button) {
     button.addEventListener("click", (event) => {
