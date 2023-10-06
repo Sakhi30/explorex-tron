@@ -297,7 +297,7 @@ const HashWidget: React.FC<AddressWidgetProps> = (props) => {
     );
   } else if (errorMessage) {
     // Display the error message
-    return <div className="error-message">{errorMessage}</div>;
+    return <div className="invalid-address">{errorMessage}</div>;
   } else {
     return (
       <div className="loader-container">
