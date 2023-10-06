@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./HashWidget.css";
-
 interface AddressWidgetProps {
   inputValue: string; // Define the prop here
   selectedChain: string;
@@ -24,25 +23,25 @@ function truncateAdd(address: string): string {
   const end = address.slice(-10);
   return `${start}...${end}`;
 }
+
 const isTransactionHashValid = (txHash: string): boolean => {
   // Check if the transaction hash has the correct length
   if (txHash.length !== 64) {
     return false;
   }
+
   // Check if the transaction hash consists of hexadecimal characters
   const isHex = /^[0-9a-fA-F]+$/.test(txHash);
   return isHex;
 };
+
 const HashWidget: React.FC<AddressWidgetProps> = (props) => {
-  console.log(props);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [copySuccessMap, setCopySuccessMap] = useState<{
     [key: string]: boolean;
   }>({});
   const [transactionData, setTransactionData] = useState<any>();
   const [transactionInfo, setTransactionInfo] = useState<any>();
   const [loading, setLoading] = useState<any>(true);
-
   const getTransactionData = async () => {
     console.log(props.inputValue);
     try {
@@ -60,17 +59,8 @@ const HashWidget: React.FC<AddressWidgetProps> = (props) => {
         }),
       });
       const resData = await response.json();
-      if (Object.keys(resData).length === 0) {
-        // Handle empty data here and set the error message
-        console.log("no data");
-        setErrorMessage("No data available");
-
-        return;
-      } else {
-        console.log(resData);
-        setTransactionData(resData);
-      }
-
+      console.log(resData);
+      setTransactionData(resData);
       const txResponse = await fetch(
         "https://api.trongrid.io/wallet/gettransactioninfobyid",
         {
@@ -83,19 +73,9 @@ const HashWidget: React.FC<AddressWidgetProps> = (props) => {
           }),
         }
       );
-
       const txResData = await txResponse.json();
-      if (Object.keys(txResData).length === 0) {
-        // Handle empty data here and set the error message
-        console.log("no data");
-        setErrorMessage("No data available");
-
-        return;
-      } else {
-        console.log(txResData);
-        setTransactionData(txResData);
-      }
-
+      console.log(txResData);
+      setTransactionInfo(txResData);
       setLoading(false);
     } catch (error) {
       console.error("Error:", error);
@@ -108,6 +88,7 @@ const HashWidget: React.FC<AddressWidgetProps> = (props) => {
     textArea.value = address;
     document.body.appendChild(textArea);
     textArea.select();
+
     try {
       const copySuccess = document.execCommand("copy");
       if (copySuccess) {
@@ -137,6 +118,7 @@ const HashWidget: React.FC<AddressWidgetProps> = (props) => {
       document.body.removeChild(textArea);
     }
   };
+
   useEffect(() => {
     getTransactionData();
   }, [props.inputValue, props.selectedChain]);
@@ -252,7 +234,7 @@ const HashWidget: React.FC<AddressWidgetProps> = (props) => {
                   )
                 : truncateAdd(
                     transactionData.raw_data.contract[0].parameter.value
-                      .to_address
+                      .contract_address
                   )}
               {copySuccessMap[
                 transactionData.raw_data.contract[0].parameter.value.to_address
@@ -290,9 +272,6 @@ const HashWidget: React.FC<AddressWidgetProps> = (props) => {
     return (
       <div className="invalid-address">Invalid transaction hash provided.</div>
     );
-  } else if (errorMessage) {
-    // Display the error message
-    return <div className="error-message">{errorMessage}</div>;
   } else {
     return (
       <div className="loader-container">
