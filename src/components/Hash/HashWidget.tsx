@@ -42,6 +42,8 @@ const HashWidget: React.FC<AddressWidgetProps> = (props) => {
   const [transactionData, setTransactionData] = useState<any>();
   const [transactionInfo, setTransactionInfo] = useState<any>();
   const [loading, setLoading] = useState<any>(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const getTransactionData = async () => {
     console.log(props.inputValue);
     try {
@@ -59,8 +61,15 @@ const HashWidget: React.FC<AddressWidgetProps> = (props) => {
         }),
       });
       const resData = await response.json();
-      console.log(resData);
-      setTransactionData(resData);
+      if (typeof resData === "object" && Object.keys(resData).length === 0) {
+        console.log("No transaction info available");
+        setErrorMessage("No data available");
+        setLoading(false);
+        return;
+      } else {
+        setTransactionData(resData);
+      }
+
       const txResponse = await fetch(
         "https://api.trongrid.io/wallet/gettransactioninfobyid",
         {
@@ -76,6 +85,20 @@ const HashWidget: React.FC<AddressWidgetProps> = (props) => {
       const txResData = await txResponse.json();
       console.log(txResData);
       setTransactionInfo(txResData);
+      if (
+        typeof txResData === "object" &&
+        Object.keys(txResData).length === 0
+      ) {
+        // Handle empty transaction info data here and set the error message
+        console.log("No transaction info available");
+
+        setErrorMessage("No transaction info available");
+        setLoading(false);
+        return;
+      } else {
+        setTransactionInfo(txResData);
+      }
+
       setLoading(false);
     } catch (error) {
       console.error("Error:", error);
@@ -272,6 +295,9 @@ const HashWidget: React.FC<AddressWidgetProps> = (props) => {
     return (
       <div className="invalid-address">Invalid transaction hash provided.</div>
     );
+  } else if (errorMessage) {
+    // Display the error message
+    return <div className="error-message">{errorMessage}</div>;
   } else {
     return (
       <div className="loader-container">
