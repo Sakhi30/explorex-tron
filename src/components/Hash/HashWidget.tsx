@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./HashWidget.css";
+
 interface AddressWidgetProps {
   inputValue: string; // Define the prop here
+  selectedChain: string;
 }
 interface HashDetailsProps {
   hash: string;
@@ -31,34 +33,44 @@ const isTransactionHashValid = (txHash: string): boolean => {
   const isHex = /^[0-9a-fA-F]+$/.test(txHash);
   return isHex;
 };
-const HashWidget: React.FC<AddressWidgetProps> = ({ inputValue }) => {
+const HashWidget: React.FC<AddressWidgetProps> = (props) => {
+  console.log(props);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [copySuccessMap, setCopySuccessMap] = useState<{
     [key: string]: boolean;
   }>({});
   const [transactionData, setTransactionData] = useState<any>();
   const [transactionInfo, setTransactionInfo] = useState<any>();
   const [loading, setLoading] = useState<any>(true);
+
   const getTransactionData = async () => {
-    console.log(inputValue);
+    console.log(props.inputValue);
     try {
       setLoading(true);
       // call the api to get the transaction data
-      const response = await fetch(
-        "https://api.trongrid.io/wallet/gettransactionbyid",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            value: inputValue,
-            visible: true,
-          }),
-        }
-      );
+      const apiUrl = props.selectedChain;
+      const response = await fetch(`${apiUrl}/wallet/gettransactionbyid`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          value: props.inputValue,
+          visible: true,
+        }),
+      });
       const resData = await response.json();
-      console.log(resData);
-      setTransactionData(resData);
+      if (Object.keys(resData).length === 0) {
+        // Handle empty data here and set the error message
+        console.log("no data");
+        setErrorMessage("No data available");
+
+        return;
+      } else {
+        console.log(resData);
+        setTransactionData(resData);
+      }
+
       const txResponse = await fetch(
         "https://api.trongrid.io/wallet/gettransactioninfobyid",
         {
@@ -67,19 +79,30 @@ const HashWidget: React.FC<AddressWidgetProps> = ({ inputValue }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            value: inputValue,
+            value: props.inputValue,
           }),
         }
       );
+
       const txResData = await txResponse.json();
-      console.log(txResData);
-      setTransactionInfo(txResData);
+      if (Object.keys(txResData).length === 0) {
+        // Handle empty data here and set the error message
+        console.log("no data");
+        setErrorMessage("No data available");
+
+        return;
+      } else {
+        console.log(txResData);
+        setTransactionData(txResData);
+      }
+
       setLoading(false);
     } catch (error) {
       console.error("Error:", error);
       setLoading(false);
     }
   };
+
   const handleCopyClick = (address: string) => {
     const textArea = document.createElement("textarea");
     textArea.value = address;
@@ -116,7 +139,8 @@ const HashWidget: React.FC<AddressWidgetProps> = ({ inputValue }) => {
   };
   useEffect(() => {
     getTransactionData();
-  }, [inputValue]);
+  }, [props.inputValue, props.selectedChain]);
+
   if (transactionData && transactionInfo) {
     return (
       <div className="hash-value-widget">
@@ -126,14 +150,14 @@ const HashWidget: React.FC<AddressWidgetProps> = ({ inputValue }) => {
             <div className="info-lable ">Tx Hash:</div>
             <div className="info-response-data add-color">
               {" "}
-              {truncateAdd(inputValue)}
-              {copySuccessMap[inputValue] ? (
+              {truncateAdd(props.inputValue)}
+              {copySuccessMap[props.inputValue] ? (
                 <img src="https://bafybeiaw4tjekiob3atick7xyrsdvx4qap2ohxzisbokzktkwufdvnreoq.ipfs.w3s.link/mark.png"></img>
               ) : (
                 <img
                   src="https://bafybeihox6phvkten27p5afegb7erbl3knwdcguc6fvgliwxof433354pu.ipfs.w3s.link/copy%20(1).png"
                   style={{ width: "12px" }}
-                  onClick={() => handleCopyClick(inputValue)}
+                  onClick={() => handleCopyClick(props.inputValue)}
                 ></img>
               )}
             </div>
@@ -228,7 +252,7 @@ const HashWidget: React.FC<AddressWidgetProps> = ({ inputValue }) => {
                   )
                 : truncateAdd(
                     transactionData.raw_data.contract[0].parameter.value
-                      .contract_address
+                      .to_address
                   )}
               {copySuccessMap[
                 transactionData.raw_data.contract[0].parameter.value.to_address
@@ -262,10 +286,13 @@ const HashWidget: React.FC<AddressWidgetProps> = ({ inputValue }) => {
         </div>
       </div>
     );
-  } else if (!isTransactionHashValid(inputValue)) {
+  } else if (!isTransactionHashValid(props.inputValue)) {
     return (
       <div className="invalid-address">Invalid transaction hash provided.</div>
     );
+  } else if (errorMessage) {
+    // Display the error message
+    return <div className="error-message">{errorMessage}</div>;
   } else {
     return (
       <div className="loader-container">

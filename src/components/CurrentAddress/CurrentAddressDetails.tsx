@@ -62,6 +62,7 @@ const CurrentAddressDetails: React.FC<addressDetailsProps> = ({ address }) => {
   const getCurrentAccountData = async () => {
     try {
       // call the api to get the basic account data
+
       const response = await fetch(
         "https://api.trongrid.io/wallet/getaccount",
         {

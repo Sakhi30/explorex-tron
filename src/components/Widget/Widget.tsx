@@ -24,16 +24,37 @@ const Widget: React.FC<WidgetProps> = ({ address }) => {
     const widgetContainer = document.getElementById("search-widget");
     widgetContainer.classList.remove("open");
     widgetContainer.classList.add("closed");
+    const inputElement = document.querySelector("#inputText");
+
+    // Check if the input element exists and if it's an instance of HTMLInputElement
+    if (inputElement instanceof HTMLInputElement) {
+      // Set the value of the input element to 'none'
+      inputElement.value = "";
+    }
+    const selectOptionElement = document.querySelector("#select-option");
+    if (
+      selectOptionElement &&
+      selectOptionElement instanceof HTMLSelectElement
+    ) {
+      // Set the value of the select element to "none"
+      selectOptionElement.value = "option1";
+    }
+    const selectChainElement = document.querySelector("#select-chain");
+    if (selectChainElement && selectChainElement instanceof HTMLSelectElement) {
+      // Set the value of the select element to "none"
+      selectChainElement.value = "chain1";
+    }
     setSelectedOption("");
+    setSelectedChain("");
     setInputValue("");
     setShowDefaultWidgets(true);
     closeWidget(); // Set isOpen to false when the close button is clicked
   };
 
   const chainURLs: { [key: string]: string } = {
-    chain1: "https://api.trongrid.io",
-    chain2: "https://api.shasta.trongrid.io",
-    chain3: "https://nile.trongrid.io",
+    Mainnet: "https://api.trongrid.io",
+    Shasta: "https://api.shasta.trongrid.io",
+    Nile: "https://nile.trongrid.io",
   };
 
   // const handleSearchButtonClick = () => {
@@ -42,10 +63,6 @@ const Widget: React.FC<WidgetProps> = ({ address }) => {
   //     const selectedValue = select.value;
   //     setSelectedOption(selectedValue);
   //     setShowDefaultWidgets(false);
-  //     const selectedURL = chainURLs[selectedChain];
-  //     setSelectedChainURL(selectedURL); // Set the selected chain URL in state
-  //     // Now you can use selectedChainURL for API requests based on the selected chain
-  //     console.log("Selected URL:", selectedChainURL);
   //   }
 
   //   const input = document.querySelector("#inputText") as HTMLInputElement;
@@ -62,21 +79,21 @@ const Widget: React.FC<WidgetProps> = ({ address }) => {
 
     const selectedOption = selectOption.value;
     const selectedChain = selectChain.value;
+    console.log(selectedChain);
 
-    if (selectedOption && selectedChain) {
-      // Both options are selected, proceed with the search
+    if (selectedOption === "option1" || selectedChain === "chain1") {
+      // Display an alert message if one or both options are not selected
+      alert("Please select both options from the drop-down.");
+    } else {
+      // Proceed with the rest of your code
       setSelectedOption(selectedOption);
       setShowDefaultWidgets(false);
       const selectedURL = chainURLs[selectedChain];
       setSelectedChainURL(selectedURL);
-      console.log("Selected URL:", selectedChainURL);
-
+      console.log("Selected URL:", selectedURL);
       const input = document.querySelector("#inputText") as HTMLInputElement;
       const selectedValue = input.value;
       setInputValue(selectedValue);
-    } else {
-      // Display an alert message if one or both options are not selected
-      alert("Please select both options from the drop-down.");
     }
   };
 
@@ -120,14 +137,18 @@ const Widget: React.FC<WidgetProps> = ({ address }) => {
             </select>
 
             <select id="select-chain" required>
-              <option value="">Select...</option>
-              <option value="chain1">Mainnet</option>
-              <option value="chain2">Shasta</option>
-              <option value="chain3">Nile</option>
+              <option value="chain1">Select...</option>
+              <option value="Mainnet">Mainnet</option>
+              <option value="Shasta">Shasta</option>
+              <option value="Nile">Nile</option>
             </select>
           </div>
           <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-            <button className="search-button" onClick={handleSearchButtonClick}>
+            <button
+              className="search-button"
+              id="search"
+              onClick={handleSearchButtonClick}
+            >
               Search
             </button>
             <button
@@ -142,10 +163,16 @@ const Widget: React.FC<WidgetProps> = ({ address }) => {
         {showDefaultWidgets && <CurrentAddressDetails address={address} />}
 
         {selectedOption === "option2" && !showDefaultWidgets && (
-          <AddressWidget inputValue={inputValue} />
+          <AddressWidget
+            inputValue={inputValue}
+            selectedChain={selectedChainURL}
+          />
         )}
         {selectedOption === "option3" && !showDefaultWidgets && (
-          <HashWidget inputValue={inputValue} />
+          <HashWidget
+            inputValue={inputValue}
+            selectedChain={selectedChainURL}
+          />
         )}
         <div
           style={{

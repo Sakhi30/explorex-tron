@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./AddressWidget.css";
+
 interface AddressWidgetProps {
   inputValue: string; // Define the prop here
+  selectedChain: string;
 }
 interface HashDetailsProps {
   hash: string;
@@ -45,8 +47,8 @@ function isAddressValid(address: string): boolean {
   }
   return true;
 }
-const AddressWidget: React.FC<AddressWidgetProps> = ({ inputValue }) => {
-  const isValidAddress = isAddressValid(inputValue);
+const AddressWidget: React.FC<AddressWidgetProps> = (props) => {
+  const isValidAddress = isAddressValid(props.inputValue);
   const [copySuccessMap, setCopySuccessMap] = useState<{
     [key: string]: boolean;
   }>({});
@@ -64,25 +66,23 @@ const AddressWidget: React.FC<AddressWidgetProps> = ({ inputValue }) => {
     try {
       setLoading(true);
       // call the api to get the basic account data
-      const response = await fetch(
-        "https://api.trongrid.io/wallet/getaccount",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            address: inputValue,
-            visible: true,
-          }),
-        }
-      );
+      const apiUrl = props.selectedChain;
+      const response = await fetch(`${apiUrl}/wallet/getaccount`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          address: props.inputValue,
+          visible: true,
+        }),
+      });
       const resData = await response.json();
       console.log(resData);
       setBasicData(resData);
       // call the api to get all the transactions of the account
       const txResponse = await fetch(
-        `https://api.trongrid.io/v1/accounts/${inputValue}/transactions`,
+        `https://api.trongrid.io/v1/accounts/${props.inputValue}/transactions`,
         {
           method: "GET",
           headers: {
@@ -102,7 +102,7 @@ const AddressWidget: React.FC<AddressWidgetProps> = ({ inputValue }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            address: inputValue,
+            address: props.inputValue,
             visible: true,
           }),
         }
@@ -152,7 +152,7 @@ const AddressWidget: React.FC<AddressWidgetProps> = ({ inputValue }) => {
   };
   useEffect(() => {
     getCurrentAccountData();
-  }, [inputValue]);
+  }, [props.inputValue, props.selectedChain]);
   if (basicData && resourceData && transactionsData) {
     return (
       <div className="hash-value-widget">
@@ -162,14 +162,14 @@ const AddressWidget: React.FC<AddressWidgetProps> = ({ inputValue }) => {
             <div className="info-lable ">Address:</div>
             <div className="info-response-data add-color">
               {" "}
-              {truncateAdd(inputValue)}
-              {copySuccessMap[inputValue] ? (
+              {truncateAdd(props.inputValue)}
+              {copySuccessMap[props.inputValue] ? (
                 <img src="https://bafybeiaw4tjekiob3atick7xyrsdvx4qap2ohxzisbokzktkwufdvnreoq.ipfs.w3s.link/mark.png"></img>
               ) : (
                 <img
                   src="https://bafybeihox6phvkten27p5afegb7erbl3knwdcguc6fvgliwxof433354pu.ipfs.w3s.link/copy%20(1).png"
                   style={{ width: "12px" }}
-                  onClick={() => handleCopyClick(inputValue)}
+                  onClick={() => handleCopyClick(props.inputValue)}
                 ></img>
               )}
             </div>
@@ -323,7 +323,7 @@ const AddressWidget: React.FC<AddressWidgetProps> = ({ inputValue }) => {
         </div>
       </div>
     );
-  } else if (!isAddressValid(inputValue)) {
+  } else if (!isAddressValid(props.inputValue)) {
     return <div className="invalid-address">Invalid address provided.</div>;
   } else {
     return (
