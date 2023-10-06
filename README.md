@@ -40,30 +40,30 @@ ExploreX is a TypeScript library designed to elevate the user experience of dece
 
 **Call GetHash() function for every transaction you sent on the blockchain.**
 
-  import { useWallet } from "@tronweb3/tronwallet-adapter-react-hooks";
-import contractAbi from "./artifacts/Swap.json"; // Your contract abi
+  import { useWallet } from "@tronweb3/tronwallet-adapter-react-hooks"; <br>
+  import contractAbi from "./artifacts/Swap.json"; // Your contract abi <br>
 
-const contractAddress = "Your contract address";
+  const contractAddress = "Your contract address"; <br>
   
-  function Swap() {
-    const { connected, address } = useWallet();
-    const { tronWeb } = window;
-    const swap= async () => {
-      const contract = await tronWeb.contract(contractAbi, contractAddress);
-      let tx = await contract.swap().send({
-        callValue: "100000",
-      });
-      GetHash(
-          tx,
-          "Enter connected chain" // Mainnet, Shasta, Nile
-        );
-    };
-    return (
-      // other code
-      <div className="App">
-        <button onClick={() => swap()}>Swap tokens</button>
-      </div>
-    );
-  }
+  function Swap() {<br>
+    const { connected, address } = useWallet();<br>
+    const { tronWeb } = window;<br>
+    const swap= async () => {<br>
+      const contract = await tronWeb.contract(contractAbi, contractAddress);<br>
+      let tx = await contract.swap().send({<br>
+        callValue: "100000",<br>
+      });<br>
+      GetHash(<br>
+          tx,<br>
+          "Enter connected chain" // Mainnet, Shasta, Nile<br>
+        );<br>
+    };<br>
+    return (<br>
+      // other code<br>
+      <div className="App"><br>
+        <button onClick={() => swap()}>Swap tokens</button><br>
+      </div><br>
+    );<br>
+  }<br>
   
-  export default Swap;
+  export default Swap;<br>
