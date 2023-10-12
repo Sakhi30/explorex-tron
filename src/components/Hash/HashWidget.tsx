@@ -46,6 +46,7 @@ const HashWidget: React.FC<AddressWidgetProps> = (props) => {
 
   const getTransactionData = async () => {
     console.log(props.inputValue);
+    setTransactionData(null);
     try {
       setLoading(true);
       // call the api to get the transaction data

@@ -89,7 +89,7 @@ input[type="text"] {
   border-radius: 2px;
   outline: none;
   color: #ffffff;
-  height: 30px;
+  height: 40px;
 }
 
 /* Button Styles */
@@ -100,7 +100,7 @@ input[type="text"] {
   color: #18141d;
   /* flex: 0 0 100px; */
   letter-spacing: 0.5px;
-  width: 70%;
+  width: 80%;
   padding: 10px 5px;
   height: 60%;
   cursor: pointer;

@@ -7,9 +7,10 @@ import { WidgetProvider, useWidget } from "../Context/WidgetContext";
 
 interface WidgetProps {
   address: string;
+  chain: string;
 }
 
-const Widget: React.FC<WidgetProps> = ({ address }) => {
+const Widget: React.FC<WidgetProps> = ({ address, chain }) => {
   // Use the useWidget hook to access context values
   const { showWidget, openWidget, closeWidget } = useWidget();
 
@@ -151,16 +152,18 @@ const Widget: React.FC<WidgetProps> = ({ address }) => {
             >
               Search
             </button>
-            <button
+            {/* <button
               className="search-button donate-btn"
               title="currently we are accepting donation on shashta network only"
             >
               Donate
-            </button>
+            </button> */}
           </div>
         </div>
 
-        {showDefaultWidgets && <CurrentAddressDetails address={address} />}
+        {showDefaultWidgets && (
+          <CurrentAddressDetails address={address} chain={chainURLs[chain]} />
+        )}
 
         {selectedOption === "option2" && !showDefaultWidgets && (
           <AddressWidget
@@ -197,10 +200,10 @@ const Widget: React.FC<WidgetProps> = ({ address }) => {
   );
 };
 
-const WidgetWithProvider: React.FC<WidgetProps> = ({ address }) => {
+const WidgetWithProvider: React.FC<WidgetProps> = ({ address, chain }) => {
   return (
     <WidgetProvider>
-      <Widget address={address} />
+      <Widget address={address} chain={chain} />
     </WidgetProvider>
   );
 };

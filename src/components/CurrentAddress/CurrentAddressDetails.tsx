@@ -3,6 +3,7 @@ import "./CurrentAddressDetails.css";
 import { getTypeParameterOwner } from "typescript";
 interface addressDetailsProps {
   address: string;
+  chain: string;
 }
 function truncateAddress(address: string): string {
   if (address.length <= 3) {
@@ -42,8 +43,13 @@ function isAddressValid(address: string): boolean {
   }
   return true;
 }
-const CurrentAddressDetails: React.FC<addressDetailsProps> = ({ address }) => {
+const CurrentAddressDetails: React.FC<addressDetailsProps> = ({
+  address,
+  chain,
+}) => {
   const isValidAddress = isAddressValid(address);
+  console.log(address, chain);
+
   const [copySuccessMap, setCopySuccessMap] = useState<{
     [key: string]: boolean;
   }>({});
@@ -61,23 +67,21 @@ const CurrentAddressDetails: React.FC<addressDetailsProps> = ({ address }) => {
   // call the apis to get the account data
   const getCurrentAccountData = async () => {
     try {
+      setLoading(true);
       // call the api to get the basic account data
-
-      const response = await fetch(
-        "https://api.trongrid.io/wallet/getaccount",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            address: address,
-            visible: true,
-          }),
-        }
-      );
+      const apiUrl = chain;
+      const response = await fetch(`${apiUrl}/wallet/getaccount`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          address: address,
+          visible: true,
+        }),
+      });
       const resData = await response.json();
-      console.log(resData);
+      console.log("BasicData", resData);
       setBasicData(resData);
       // call the api to get all the transactions of the account
       const txResoponse = await fetch(
@@ -90,7 +94,8 @@ const CurrentAddressDetails: React.FC<addressDetailsProps> = ({ address }) => {
         }
       );
       const txResoponseData = await txResoponse.json();
-      console.log(txResoponseData.data);
+      console.log("tx Data", txResoponseData);
+      console.log("tx Data.data", txResoponseData.data);
       setTransactionsData(txResoponseData.data);
       // call the api to get resources
       const resourcesResoponse = await fetch(
@@ -107,11 +112,12 @@ const CurrentAddressDetails: React.FC<addressDetailsProps> = ({ address }) => {
         }
       );
       const resourcesData = await resourcesResoponse.json();
-      console.log(resourcesData);
+      console.log("res Data", resourcesData);
       setResourceData(resourcesData);
       setLoading(false);
     } catch (error) {
       console.error("Error:", error);
+      setLoading(false);
     }
   };
   const handleCopyClick = (address: string) => {
@@ -148,9 +154,12 @@ const CurrentAddressDetails: React.FC<addressDetailsProps> = ({ address }) => {
       document.body.removeChild(textArea);
     }
   };
+
   useEffect(() => {
-    if (address) getCurrentAccountData();
-  }, [address]);
+    if (address && chain) getCurrentAccountData();
+  }, [address, chain]);
+
+  console.log(basicData && resourceData && transactionsData);
   if (basicData && resourceData && transactionsData) {
     return (
       <div className="hash-value-widget">
@@ -160,14 +169,18 @@ const CurrentAddressDetails: React.FC<addressDetailsProps> = ({ address }) => {
             <div className="info-lable ">Address:</div>
             <div className="info-response-data add-color">
               {" "}
-              {truncateAdd(basicData.address)}
-              {copySuccessMap[basicData.address] ? (
+              {truncateAdd(basicData.address ? basicData.address : address)}
+              {basicData && copySuccessMap[basicData.address] ? (
                 <img src="https://bafybeiaw4tjekiob3atick7xyrsdvx4qap2ohxzisbokzktkwufdvnreoq.ipfs.w3s.link/mark.png"></img>
               ) : (
                 <img
                   src="https://bafybeihox6phvkten27p5afegb7erbl3knwdcguc6fvgliwxof433354pu.ipfs.w3s.link/copy%20(1).png"
                   style={{ width: "12px" }}
-                  onClick={() => handleCopyClick(basicData.address)}
+                  onClick={() =>
+                    handleCopyClick(
+                      basicData.address ? basicData.address : address
+                    )
+                  }
                 ></img>
               )}
             </div>
@@ -175,13 +188,14 @@ const CurrentAddressDetails: React.FC<addressDetailsProps> = ({ address }) => {
           <div className="info-item">
             <div className="info-lable">Balance:</div>
             <div className="info-response-data result-color">
-              {basicData.balance ? basicData.balance / 10 ** 6 : 0} TRX
+              {basicData && basicData.balance ? basicData.balance / 10 ** 6 : 0}{" "}
+              TRX
             </div>
           </div>
           <div className="info-item">
             <div className="info-lable">Create_Time:</div>
             <div className="info-response-data">
-              {basicData.create_time
+              {basicData && basicData.create_time
                 ? new Date(basicData.create_time).toLocaleString()
                 : "Not Active"}
             </div>
@@ -190,7 +204,7 @@ const CurrentAddressDetails: React.FC<addressDetailsProps> = ({ address }) => {
             <div className="info-lable">Bandwidth:</div>
             <div className="info-response-data">
               Available:{" "}
-              {resourceData.NetLimit && resourceData.freeNetUsed
+              {resourceData && resourceData.NetLimit && resourceData.freeNetUsed
                 ? resourceData.freeNetLimit +
                   resourceData.NetLimit -
                   resourceData.freeNetUsed
@@ -202,7 +216,7 @@ const CurrentAddressDetails: React.FC<addressDetailsProps> = ({ address }) => {
                 ? resourceData.freeNetLimit
                 : 0}
               /
-              {resourceData.NetLimit
+              {resourceData && resourceData.NetLimit
                 ? resourceData.freeNetLimit + resourceData.NetLimit
                 : resourceData.freeNetLimit
                 ? resourceData.freeNetLimit
@@ -213,16 +227,26 @@ const CurrentAddressDetails: React.FC<addressDetailsProps> = ({ address }) => {
             <div className="info-lable">Energy:</div>
             <div className="info-response-data">
               Available:{" "}
-              {resourceData.EnergyLimit ? resourceData.EnergyLimit : 0}/
-              {resourceData.EnergyLimit ? resourceData.EnergyLimit : 0}
+              {resourceData && resourceData.EnergyLimit
+                ? resourceData.EnergyLimit
+                : 0}
+              /
+              {resourceData && resourceData.EnergyLimit
+                ? resourceData.EnergyLimit
+                : 0}
             </div>
           </div>
           <div className="info-item">
             <div className="info-lable">Votes:</div>
             <div className="info-response-data">
               Voted:
-              {resourceData.tronPowerUsed ? resourceData.tronPowerUsed : "0"}/
-              {resourceData.tronPowerLimit ? resourceData.tronPowerLimit : "0"}
+              {resourceData && resourceData.tronPowerUsed
+                ? resourceData.tronPowerUsed
+                : "0"}
+              /
+              {resourceData && resourceData.tronPowerLimit
+                ? resourceData.tronPowerLimit
+                : "0"}
             </div>
           </div>
           <div className="info-item2">
@@ -237,7 +261,7 @@ const CurrentAddressDetails: React.FC<addressDetailsProps> = ({ address }) => {
                 </tr>
               </thead>
               <tbody>
-                {transactionsData.length > 0
+                {transactionsData && transactionsData.length > 0
                   ? transactionsData.map((data: any, index: any) => (
                       <tr key={index}>
                         <td
@@ -247,7 +271,7 @@ const CurrentAddressDetails: React.FC<addressDetailsProps> = ({ address }) => {
                             justifyContent: "space-evenly",
                           }}
                         >
-                          {truncateAddress(data.txID)}
+                          {data.txID && truncateAddress(data.txID)}
                           {copySuccessMap[data.txID] ? (
                             <img
                               src="https://bafybeigk6xicsfexybksnorw7wsdz23claloq5uweophepc2conxuq3reu.ipfs.w3s.link/mark-white.png"
@@ -286,7 +310,7 @@ const CurrentAddressDetails: React.FC<addressDetailsProps> = ({ address }) => {
                 </tr>
               </thead>
               <tbody>
-                {basicData.votes
+                {basicData && basicData.votes
                   ? basicData.votes.map((data: any, index: any) => (
                       <tr key={index}>
                         <td
@@ -296,7 +320,7 @@ const CurrentAddressDetails: React.FC<addressDetailsProps> = ({ address }) => {
                             justifyContent: "space-evenly",
                           }}
                         >
-                          {truncateAddress(data.vote_address)}
+                          {data && truncateAddress(data.vote_address)}
                           {copySuccessMap[data.vote_address] ? (
                             <img
                               src="https://bafybeigk6xicsfexybksnorw7wsdz23claloq5uweophepc2conxuq3reu.ipfs.w3s.link/mark-white.png"
