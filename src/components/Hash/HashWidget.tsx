@@ -46,6 +46,9 @@ const HashWidget: React.FC<AddressWidgetProps> = (props) => {
 
   const getTransactionData = async () => {
     console.log(props.inputValue);
+    if (!isTransactionHashValid(props.inputValue)) {
+      return;
+    }
     setTransactionData(null);
     try {
       setLoading(true);
@@ -64,7 +67,7 @@ const HashWidget: React.FC<AddressWidgetProps> = (props) => {
       const resData = await response.json();
       if (typeof resData === "object" && Object.keys(resData).length === 0) {
         console.log("No transaction info available");
-        setErrorMessage("No data available");
+        setErrorMessage("Transaction data is not available on this chain");
         setLoading(false);
         return;
       } else {

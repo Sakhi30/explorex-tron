@@ -1,6 +1,6 @@
 {
   "name": "explorex",
-  "version": "0.0.1",
+  "version": "2.0.6",
   "description": "React component library to add transaction info widgets to any DAPP.",
   "main": "dist/cjs/index.js",
   "scripts": {

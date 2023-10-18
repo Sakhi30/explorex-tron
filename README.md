@@ -1,6 +1,6 @@
 ﻿# ExploreX
 
-![npm version](https://img.shields.io/npm/v/ascai-trx.svg?style=flat-square)
+![npm version](https://img.shields.io/npm/v/explorex.svg?style=flat-square)
 
 ## Overview
 
@@ -8,62 +8,74 @@ ExploreX is a TypeScript library designed to elevate the user experience of dece
 
 ## Installation
 
-**You can install explorex using npm or yarn:**
+You can install ExploreX using npm or yarn:
 
-    npm  install  explorex
+```bash
+npm install explorex
 
-    ## OR
+# OR
 
-    yarn  add  explorex
+yarn add explorex
+```
 
 ## Usage
 
-**To use explorex in your project, follow these steps:**
+To use ExploreX in your project, follow these steps:
 
-**Import the explorex Widget component into your main file(app.js):**
+Import the ExploreX Widget component into your main file (app.js):
 
-  import  {Widget}  from  "explorex";
+```bash
 
-  import { Widget } from "explorex";
-  
-  function App() {
-    // Your code
-    return (
-      <div className="App">
-        <Widget address="Connected wallet address" />
-      </div>
-      // Your code
+import { Widget } from "explorex";
+
+function App() {
+  return (
+    <div className="App">
+      <Widget address="Connected wallet address" chain="Mainnet or Shasta or Nile" />
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+Call GetHash() function for every transaction you send on the blockchain:
+
+```bash
+
+import { useWallet } from "@tronweb3/tronwallet-adapter-react-hooks";
+import contractAbi from "./artifacts/Swap.json"; // Your contract ABI
+
+const contractAddress = "Your contract address";
+
+function Swap() {
+  const { connected, address } = useWallet();
+  const { tronWeb } = window;
+
+  const swap = async () => {
+    const contract = await tronWeb.contract(contractAbi, contractAddress);
+    let tx = await contract.swap().send({
+      callValue: "100000",
+    });
+
+    GetHash(
+      tx,
+      "Enter connected chain" // Mainnet, Shasta, Nile
     );
-  }
-  
-  export default App;
+  };
 
-**Call GetHash() function for every transaction you sent on the blockchain.**
+  return (
+    // Other code
 
-  import { useWallet } from "@tronweb3/tronwallet-adapter-react-hooks"; <br>
-  import contractAbi from "./artifacts/Swap.json"; // Your contract abi <br>
+    <div className="App">
+      <button onClick={() => swap()}>Swap tokens</button>
+    </div>
+  );
+}
 
-  const contractAddress = "Your contract address"; <br>
-  
-  function Swap() {<br>
-    const { connected, address } = useWallet();<br>
-    const { tronWeb } = window;<br>
-    const swap= async () => {<br>
-      const contract = await tronWeb.contract(contractAbi, contractAddress);<br>
-      let tx = await contract.swap().send({<br>
-        callValue: "100000",<br>
-      });<br>
-      GetHash(<br>
-          tx,<br>
-          "Enter connected chain" // Mainnet, Shasta, Nile<br>
-        );<br>
-    };<br>
-    return (<br>
-      // other code<br>
-      <div className="App"><br>
-        <button onClick={() => swap()}>Swap tokens</button><br>
-      </div><br>
-    );<br>
-  }<br>
-  
-  export default Swap;<br>
+export default Swap;
+
+```
+
+Make sure to replace placeholders like "Connected wallet address", "Mainnet or Shasta or Nile", and others with actual values relevant to your project.
