@@ -31,7 +31,7 @@ import { Widget } from "explorex";
 function App() {
   return (
     <div className="App">
-      <Widget address="Connected wallet address" chain="Mainnet or Shasta or Nile" />
+      <Widget address="Connected wallet address" chain="Mainnet or Shasta or Nile" /> /*keep the condition wallet must be connected using ternary operator o/w it will give an error.*/
     </div>
   );
 }

@@ -66,8 +66,7 @@ const HashWidget: React.FC<AddressWidgetProps> = (props) => {
       });
       const resData = await response.json();
       if (typeof resData === "object" && Object.keys(resData).length === 0) {
-        console.log("No transaction info available");
-        setErrorMessage("Transaction data is not available on this chain");
+        setErrorMessage("Transaction info is not available on this chain.");
         setLoading(false);
         return;
       } else {
@@ -75,7 +74,7 @@ const HashWidget: React.FC<AddressWidgetProps> = (props) => {
       }
 
       const txResponse = await fetch(
-        "https://api.trongrid.io/wallet/gettransactioninfobyid",
+        `${apiUrl}/wallet/gettransactioninfobyid`,
         {
           method: "POST",
           headers: {
@@ -94,9 +93,8 @@ const HashWidget: React.FC<AddressWidgetProps> = (props) => {
         Object.keys(txResData).length === 0
       ) {
         // Handle empty transaction info data here and set the error message
-        console.log("No transaction info available");
 
-        setErrorMessage("No transaction info available");
+        setErrorMessage("Transaction info is not available on this chain.");
         setLoading(false);
         return;
       } else {

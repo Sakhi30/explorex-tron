@@ -82,7 +82,7 @@ const AddressWidget: React.FC<AddressWidgetProps> = (props) => {
       setBasicData(resData);
       // call the api to get all the transactions of the account
       const txResponse = await fetch(
-        `https://api.trongrid.io/v1/accounts/${props.inputValue}/transactions`,
+        `${apiUrl}/v1/accounts/${props.inputValue}/transactions`,
         {
           method: "GET",
           headers: {
@@ -95,7 +95,7 @@ const AddressWidget: React.FC<AddressWidgetProps> = (props) => {
       setTransactionsData(txResponseData.data);
       // call the api to get resources
       const resourcesResponse = await fetch(
-        "https://api.trongrid.io/wallet/getaccountresource",
+        `${apiUrl}/wallet/getaccountresource`,
         {
           method: "POST",
           headers: {
@@ -270,7 +270,7 @@ const AddressWidget: React.FC<AddressWidgetProps> = (props) => {
                         <td>{data.ret[0].contractRet}</td>
                       </tr>
                     ))
-                  : "No transactions yet!"}{" "}
+                  : "There are no transactions yet."}{" "}
               </tbody>
             </table>
           </div>
@@ -316,7 +316,7 @@ const AddressWidget: React.FC<AddressWidgetProps> = (props) => {
                         <td>{data.vote_count}</td>
                       </tr>
                     ))
-                  : "Have not done voting."}{" "}
+                  : "You haven't cast your vote yet."}{" "}
               </tbody>
             </table>
           </div>

@@ -47,9 +47,6 @@ const CurrentAddressDetails: React.FC<addressDetailsProps> = ({
   address,
   chain,
 }) => {
-  const isValidAddress = isAddressValid(address);
-  console.log(address, chain);
-
   const [copySuccessMap, setCopySuccessMap] = useState<{
     [key: string]: boolean;
   }>({});
@@ -85,7 +82,7 @@ const CurrentAddressDetails: React.FC<addressDetailsProps> = ({
       setBasicData(resData);
       // call the api to get all the transactions of the account
       const txResoponse = await fetch(
-        `https://api.trongrid.io/v1/accounts/${address}/transactions`,
+        `${apiUrl}/v1/accounts/${address}/transactions`,
         {
           method: "GET",
           headers: {
@@ -99,7 +96,7 @@ const CurrentAddressDetails: React.FC<addressDetailsProps> = ({
       setTransactionsData(txResoponseData.data);
       // call the api to get resources
       const resourcesResoponse = await fetch(
-        "https://api.trongrid.io/wallet/getaccountresource",
+        `${apiUrl}/wallet/getaccountresource`,
         {
           method: "POST",
           headers: {
@@ -292,7 +289,7 @@ const CurrentAddressDetails: React.FC<addressDetailsProps> = ({
                         <td>{data.ret[0].contractRet}</td>
                       </tr>
                     ))
-                  : "No transactions yet!"}
+                  : "There are no transactions yet."}
               </tbody>
             </table>
           </div>
@@ -337,7 +334,7 @@ const CurrentAddressDetails: React.FC<addressDetailsProps> = ({
                         <td>{data.vote_count}</td>
                       </tr>
                     ))
-                  : "Have not done voting."}{" "}
+                  : "You haven't cast your vote yet."}{" "}
               </tbody>
             </table>
           </div>
