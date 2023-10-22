@@ -176,7 +176,7 @@ input[type="text"] {
 }
 
 .search-btn {
-  position: absolute;
+  position: fixed;
   bottom: 10px; /* Adjust the distance from the bottom as needed */
   right: 10px; /* Adjust the distance from the right as needed */
   padding: 10px 20px; /* Add padding for the button */
@@ -185,7 +185,6 @@ input[type="text"] {
   cursor: pointer;
   animation: zoomInOut 0.5s; /* Adjust the duration as needed */
   animation-fill-mode: forwards;
-  animation: zoom-in-zoom-out 2s ease infinite;
 }
 .search-btn::before {
   animation: animatedgradient 3s ease infinite alternate;
